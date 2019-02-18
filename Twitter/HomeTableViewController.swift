@@ -24,10 +24,9 @@ class HomeTableViewController: UITableViewController {
         
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 150
         
-        
-        
-
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -56,6 +55,11 @@ class HomeTableViewController: UITableViewController {
         }, failure: { (Error) in
             print("Could not retrieve tweets!!")
         })
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
     }
     
     func loadMoreTweets(){
@@ -105,6 +109,9 @@ class HomeTableViewController: UITableViewController {
             cell.profileImage.image = UIImage(data: imageData)
         }
         
+        cell.setFavorite(tweets[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweets[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweets[indexPath.row]["favorited"] as! Bool)
         cell.usernameLabel.text = user["name"] as! String
         cell.tweetContentLabel.text = tweets[indexPath.row]["text"] as! String
         
